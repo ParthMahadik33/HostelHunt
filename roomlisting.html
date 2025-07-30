@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Your Room - HostelHunt</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #F9FAFB 0%, #FFFFFF 100%);
+            min-height: 100vh;
+            color: #4B5563;
+        }
+
+        /* Animated background elements */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-shape {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.1));
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .floating-shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        .floating-shape:nth-child(4) {
+            width: 40px;
+            height: 40px;
+            top: 30%;
+            right: 25%;
+            animation-delay: 1s;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(16, 185, 129, 0.1));
+        }
+
+        .floating-shape:nth-child(5) {
+            width: 100px;
+            height: 100px;
+            bottom: 40%;
+            right: 5%;
+            animation-delay: 3s;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(245, 158, 11, 0.1));
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg) scale(1); 
+                opacity: 0.6;
+            }
+            33% { 
+                transform: translateY(-30px) rotate(120deg) scale(1.1); 
+                opacity: 0.8;
+            }
+            66% { 
+                transform: translateY(-15px) rotate(240deg) scale(0.9); 
+                opacity: 0.4;
+            }
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid #F3F4F6;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #3B82F6;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(45deg, #3B82F6, #10B981);
+            transition: width 0.3s ease;
+        }
+
+        .logo:hover::after {
+            width: 100%;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            color: #2563EB;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #4B5563;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #3B82F6;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            transform: translateY(-2px);
+            color: #3B82F6;
+        }
+
+        /* Main Content */
+        main {
+            padding: 120px 5% 50px;
+            max-width: 800px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: slideInDown 1s ease-out;
+        }
+
+        .page-header h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: #111827;
+            position: relative;
+        }
+
+        .page-header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(45deg, #F59E0B, #10B981);
+            border-radius: 2px;
+            animation: underlineGrow 1.5s ease-out 0.5s both;
+        }
+
+        @keyframes underlineGrow {
+            from {
+                width: 0;
+                opacity: 0;
+            }
+            to {
+                width: 80px;
+                opacity: 1;
+            }
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: #6B7280;
+            animation: slideInUp 1s ease-out 0.3s both;
+        }
+
+        /* Form Styles */
+        .listing-form {
+            background: #FFFFFF;
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid #F3F4F6;
+            animation: slideInUp 1s ease-out 0.6s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .listing-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.03), transparent);
+            transition: left 0.8s;
+        }
+
+        .listing-form:hover::before {
+            left: 100%;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-section h3::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(45deg, #3B82F6, #10B981);
+            border-radius: 2px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid #E5E7EB;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #FAFBFC;
+            color: #111827;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3B82F6;
+            background: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            transform: translateY(-1px);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Custom Select Styling */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.75rem center;
+            background-repeat: no-repeat;
+            background-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        /* Radio Button Group */
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .radio-option {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            border: 2px solid #E5E7EB;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #FAFBFC;
+        }
+
+        .radio-option:hover {
+            border-color: #3B82F6;
+            background: #F8FAFF;
+            transform: translateY(-1px);
+        }
+
+        .radio-option input[type="radio"] {
+            width: auto;
+            margin: 0;
+            accent-color: #3B82F6;
+        }
+
+        .radio-option.selected {
+            border-color: #3B82F6;
+            background: linear-gradient(135deg, #F0F7FF 0%, #E0F0FF 100%);
+            color: #1E40AF;
+            font-weight: 600;
+        }
+
+        /* Submit Button */
+        .submit-section {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #F3F4F6;
+        }
+
+        .submit-btn {
+            padding: 1rem 3rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(45deg, #F59E0B, #D97706);
+            color: white;
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);
+            position: relative;
+            overflow: hidden;
+            transform: translateY(0);
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(245, 158, 11, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Animations */
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Progress Indicator */
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #E5E7EB;
+            border-radius: 2px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #3B82F6, #10B981);
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            main {
+                padding: 100px 3% 30px;
+            }
+
+            .listing-form {
+                padding: 1.5rem;
+                border-radius: 16px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .radio-group {
+                flex-direction: column;
+            }
+
+            .radio-option {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .listing-form {
+                padding: 1rem;
+            }
+
+            .submit-btn {
+                width: 100%;
+                padding: 1rem 2rem;
+            }
+        }
+
+        /* Success Animation */
+        @keyframes success {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .success-feedback {
+            background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
+            border: 2px solid #10B981;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+            animation: success 0.5s ease-out;
+            color: #047857;
+            font-weight: 600;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation">
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+    </div>
+
+    <header>
+        <nav>
+            <a href="#" class="logo">HostelHunt</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#team">Team</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <h1>🏠 List Your Room</h1>
+            <p>Share your space with fellow students and find the perfect roommate</p>
+        </div>
+
+        <form class="listing-form" id="listingForm">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <div class="form-section">
+                <h3>🏘️ Property Details</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="bhk">BHK Type</label>
+                        <select id="bhk" name="bhk" required>
+                            <option value="">Select BHK</option>
+                            <option value="1bhk">1 BHK</option>
+                            <option value="2bhk">2 BHK</option>
+                            <option value="3bhk">3 BHK</option>
+                            <option value="4bhk">4+ BHK</option>
+                            <option value="studio">Studio</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="roommates">Number of Roommates</label>
+                        <select id="roommates" name="roommates" required>
+                            <option value="">Select count</option>
+                            <option value="0">Just me (no roommates)</option>
+                            <option value="1">1 Roommate</option>
+                            <option value="2">2 Roommates</option>
+                            <option value="3">3 Roommates</option>
+                            <option value="4">4+ Roommates</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="building">Building Name</label>
+                        <input type="text" id="building" name="building" placeholder="e.g., Sunrise Apartments" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="locality">Locality/Area</label>
+                        <input type="text" id="locality" name="locality" placeholder="e.g., Koramangala, BTM Layout" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>💰 Pricing Details</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="rent">Rent per Month (₹)</label>
+                        <input type="number" id="rent" name="rent" placeholder="15000" min="1000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="deposit">Security Deposit (₹)</label>
+                        <input type="number" id="deposit" name="deposit" placeholder="30000" min="0" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>🏠 Accommodation Type</h3>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="accommodation" value="private_room" required>
+                        <span>Private Room</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="accommodation" value="shared_room" required>
+                        <span>Shared Room</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="accommodation" value="entire_flat" required>
+                        <span>Entire Flat</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>🔧 Amenities</h3>
+                <div class="form-group full-width">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
+                            <input type="checkbox" name="amenities" value="wifi" style="width: auto;">
+                            📶 Wi-Fi
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
+                            <input type="checkbox" name="amenities" value="ac" style="width: auto;">
+                            ❄️ AC
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
+                            <input type="checkbox" name="amenities" value="parking" style="width: auto;">
+                            🚗 Parking
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
+                            <input type="checkbox" name="amenities" value="laundry" style="width: auto;">
+                            👕 Washing Machine
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
+                            <input type="checkbox" name="amenities" value="gym" style="width: auto;">
+                            🏋️ Gym
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
+                            <input type="checkbox" name="amenities" value="security" style="width: auto;">
+                            🛡️ 24/7 Security
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>📝 Additional Details</h3>
+                <div class="form-group full-width">
+                    <label for="description">Flat Details & Description</label>
+                    <textarea id="description" name="description" placeholder="Describe your flat, nearby amenities, transportation, and any specific requirements for roommates..." required></textarea>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>📞 Contact Information</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="+91 98765 43210" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="submit-section">
+                <button type="submit" class="submit-btn">
+                    🚀 List My Room
+                </button>
+                <p style="margin-top: 1rem; color: #6B7280; font-size: 0.9rem;">
+                    By listing your room, you agree to our terms of service and privacy policy.
+                </p>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        // Progress tracking
+        const form = document.getElementById('listingForm');
+        const progressFill = document.getElementById('progressFill');
+        const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+        
+        function updateProgress() {
+            let filledInputs = 0;
+            inputs.forEach(input => {
+                if (input.type === 'radio') {
+                    const radioGroup = form.querySelectorAll(`input[name="${input.name}"]`);
+                    const isChecked = Array.from(radioGroup).some(radio => radio.checked);
+                    if (isChecked && input.checked) filledInputs++;
+                } else if (input.value.trim() !== '') {
+                    filledInputs++;
+                }
+            });
+            
+            const progress = (filledInputs / inputs.length) * 100;
+            progressFill.style.width = progress + '%';
+        }
+
+        // Add event listeners to all form inputs
+        inputs.forEach(input => {
+            input.addEventListener('input', updateProgress);
+            input.addEventListener('change', updateProgress);
+        });
+
+        // Radio button styling
+        const radioOptions = document.querySelectorAll('.radio-option');
+        radioOptions.forEach(option => {
+            const radioInput = option.querySelector('input[type="radio"]');
+            radioInput.addEventListener('change', () => {
+                // Remove selected class from all options in the same group
+                const groupName = radioInput.name;
+                document.querySelectorAll(`input[name="${groupName}"]`).forEach(radio => {
+                    radio.closest('.radio-option').classList.remove('selected');
+                });
+                // Add selected class to current option
+                if (radioInput.checked) {
+                    option.classList.add('selected');
+                }
+                updateProgress();
+            });
+        });
+
+        // Form submission
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(form);
+            const data = {};
+            
+            // Regular form fields
+            for (let [key, value] of formData.entries()) {
+                if (data[key]) {
+                    // Handle multiple values (like amenities checkboxes)
+                    if (Array.isArray(data[key])) {
+                        data[key].push(value);
+                    } else {
+                        data[key] = [data[key], value];
+                    }
+                } else {
+                    data[key] = value;
+                }
+            }
+            
+            // Handle amenities checkboxes
+            const amenities = [];
+            document.querySelectorAll('input[name="amenities"]:checked').forEach(checkbox => {
+                amenities.push(checkbox.value);
+            });
+            data.amenities = amenities;
+            
+            console.log('Form Data:', data);
+            
+            // Simulate form submission
+            const submitBtn = form.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            
+            submitBtn.textContent = '🔄 Submitting...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                submitBtn.textContent = '✅ Room Listed Successfully!';
+                submitBtn.style.background = 'linear-gradient(45deg, #10B981, #059669)';
+                
+                // Show success message
+                const successDiv = document.createElement('div');
+                successDiv.className = 'success-feedback';
+                successDiv.textContent = '🎉 Your room has been listed successfully! You will receive inquiries via email and phone.';
+                form.appendChild(successDiv);
+                
+                // Reset form after delay
+                setTimeout(() => {
+                    form.reset();
+                    updateProgress();
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                    submitBtn.style.background = 'linear-gradient(45deg, #F59E0B, #D97706)';
+                    successDiv.remove();
+                    radioOptions.forEach(option => option.classList.remove('selected'));
+                }, 3000);
+            }, 2000);
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
+            }
+        });
+
+        // Input focus animations
+        document.querySelectorAll('input, select, textarea').forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.style.transform = 'translateY(-2px)';
+            });
+            
+            input.addEventListener('blur', () => {
+                input.parentElement.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Initialize progress on page load
+        updateProgress();
+    </script>
+</body>
+</html>
