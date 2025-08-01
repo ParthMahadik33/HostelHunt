@@ -3,846 +3,272 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>List Your Room - HostelHunt</title>
+    <title>Hostel Hunt - List Your Room</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            line-height: 1.6;
-            overflow-x: hidden;
-            background: linear-gradient(135deg, #F9FAFB 0%, #FFFFFF 100%);
-            min-height: 100vh;
-            color: #4B5563;
+            font-family: 'Inter', sans-serif;
         }
-
-        /* Animated background elements */
-        .bg-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
+        .success-message {
+            transform: translateY(-20px);
+            opacity: 0;
+            animation: slideIn 0.5s ease-out forwards;
         }
-
-        .floating-shape {
-            position: absolute;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.1));
-            border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .floating-shape:nth-child(1) {
-            width: 80px;
-            height: 80px;
-            top: 10%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .floating-shape:nth-child(2) {
-            width: 120px;
-            height: 120px;
-            top: 60%;
-            right: 10%;
-            animation-delay: 2s;
-        }
-
-        .floating-shape:nth-child(3) {
-            width: 60px;
-            height: 60px;
-            bottom: 20%;
-            left: 20%;
-            animation-delay: 4s;
-        }
-
-        .floating-shape:nth-child(4) {
-            width: 40px;
-            height: 40px;
-            top: 30%;
-            right: 25%;
-            animation-delay: 1s;
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(16, 185, 129, 0.1));
-        }
-
-        .floating-shape:nth-child(5) {
-            width: 100px;
-            height: 100px;
-            bottom: 40%;
-            right: 5%;
-            animation-delay: 3s;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(245, 158, 11, 0.1));
-        }
-
-        @keyframes float {
-            0%, 100% { 
-                transform: translateY(0px) rotate(0deg) scale(1); 
-                opacity: 0.6;
-            }
-            33% { 
-                transform: translateY(-30px) rotate(120deg) scale(1.1); 
-                opacity: 0.8;
-            }
-            66% { 
-                transform: translateY(-15px) rotate(240deg) scale(0.9); 
-                opacity: 0.4;
-            }
-        }
-
-        /* Header */
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            backdrop-filter: blur(20px);
-            background: rgba(255, 255, 255, 0.95);
-            border-bottom: 1px solid #F3F4F6;
-            transition: all 0.3s ease;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 5%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #3B82F6;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .logo::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(45deg, #3B82F6, #10B981);
-            transition: width 0.3s ease;
-        }
-
-        .logo:hover::after {
-            width: 100%;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
-            color: #2563EB;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: #4B5563;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #3B82F6;
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .nav-links a:hover {
-            transform: translateY(-2px);
-            color: #3B82F6;
-        }
-
-        /* Main Content */
-        main {
-            padding: 120px 5% 50px;
-            max-width: 800px;
-            margin: 0 auto;
-            min-height: 100vh;
-        }
-
-        .page-header {
-            text-align: center;
-            margin-bottom: 3rem;
-            animation: slideInDown 1s ease-out;
-        }
-
-        .page-header h1 {
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 800;
-            margin-bottom: 1rem;
-            color: #111827;
-            position: relative;
-        }
-
-        .page-header h1::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(45deg, #F59E0B, #10B981);
-            border-radius: 2px;
-            animation: underlineGrow 1.5s ease-out 0.5s both;
-        }
-
-        @keyframes underlineGrow {
-            from {
-                width: 0;
-                opacity: 0;
-            }
+        @keyframes slideIn {
             to {
-                width: 80px;
+                transform: translateY(0);
                 opacity: 1;
             }
-        }
-
-        .page-header p {
-            font-size: 1.1rem;
-            color: #6B7280;
-            animation: slideInUp 1s ease-out 0.3s both;
-        }
-
-        /* Form Styles */
-        .listing-form {
-            background: #FFFFFF;
-            border-radius: 24px;
-            padding: 2.5rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            border: 1px solid #F3F4F6;
-            animation: slideInUp 1s ease-out 0.6s both;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .listing-form::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.03), transparent);
-            transition: left 0.8s;
-        }
-
-        .listing-form:hover::before {
-            left: 100%;
-        }
-
-        .form-section {
-            margin-bottom: 2rem;
-        }
-
-        .form-section h3 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #111827;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .form-section h3::before {
-            content: '';
-            width: 4px;
-            height: 20px;
-            background: linear-gradient(45deg, #3B82F6, #10B981);
-            border-radius: 2px;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .form-group {
-            position: relative;
-        }
-
-        .form-group.full-width {
-            grid-column: 1 / -1;
-        }
-
-        label {
-            display: block;
-            font-weight: 600;
-            color: #374151;
-            margin-bottom: 0.5rem;
-            font-size: 0.95rem;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 0.875rem 1rem;
-            border: 2px solid #E5E7EB;
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: #FAFBFC;
-            color: #111827;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #3B82F6;
-            background: #FFFFFF;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-            transform: translateY(-1px);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 120px;
-        }
-
-        /* Custom Select Styling */
-        select {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 0.75rem center;
-            background-repeat: no-repeat;
-            background-size: 1.25rem;
-            cursor: pointer;
-        }
-
-        /* Radio Button Group */
-        .radio-group {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .radio-option {
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.25rem;
-            border: 2px solid #E5E7EB;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: #FAFBFC;
-        }
-
-        .radio-option:hover {
-            border-color: #3B82F6;
-            background: #F8FAFF;
-            transform: translateY(-1px);
-        }
-
-        .radio-option input[type="radio"] {
-            width: auto;
-            margin: 0;
-            accent-color: #3B82F6;
-        }
-
-        .radio-option.selected {
-            border-color: #3B82F6;
-            background: linear-gradient(135deg, #F0F7FF 0%, #E0F0FF 100%);
-            color: #1E40AF;
-            font-weight: 600;
-        }
-
-        /* Submit Button */
-        .submit-section {
-            text-align: center;
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid #F3F4F6;
-        }
-
-        .submit-btn {
-            padding: 1rem 3rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: linear-gradient(45deg, #F59E0B, #D97706);
-            color: white;
-            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);
-            position: relative;
-            overflow: hidden;
-            transform: translateY(0);
-        }
-
-        .submit-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.6s;
-        }
-
-        .submit-btn:hover::before {
-            left: 100%;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(245, 158, 11, 0.4);
-        }
-
-        .submit-btn:active {
-            transform: translateY(-1px);
-        }
-
-        /* Animations */
-        @keyframes slideInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-50px) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        /* Progress Indicator */
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: #E5E7EB;
-            border-radius: 2px;
-            margin-bottom: 2rem;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(45deg, #3B82F6, #10B981);
-            border-radius: 2px;
-            width: 0%;
-            transition: width 0.5s ease;
-            position: relative;
-        }
-
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-
-        /* Mobile Responsiveness */
-        @media (max-width: 768px) {
-            main {
-                padding: 100px 3% 30px;
-            }
-
-            .listing-form {
-                padding: 1.5rem;
-                border-radius: 16px;
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .radio-group {
-                flex-direction: column;
-            }
-
-            .radio-option {
-                justify-content: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .page-header h1 {
-                font-size: 2rem;
-            }
-
-            .listing-form {
-                padding: 1rem;
-            }
-
-            .submit-btn {
-                width: 100%;
-                padding: 1rem 2rem;
-            }
-        }
-
-        /* Success Animation */
-        @keyframes success {
-            0% { transform: scale(0.8); opacity: 0; }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .success-feedback {
-            background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
-            border: 2px solid #10B981;
-            border-radius: 12px;
-            padding: 1rem;
-            margin-top: 1rem;
-            animation: success 0.5s ease-out;
-            color: #047857;
-            font-weight: 600;
-            text-align: center;
         }
     </style>
 </head>
-<body>
-    <div class="bg-animation">
-        <div class="floating-shape"></div>
-        <div class="floating-shape"></div>
-        <div class="floating-shape"></div>
-        <div class="floating-shape"></div>
-        <div class="floating-shape"></div>
-    </div>
-
-    <header>
-        <nav>
-            <a href="#" class="logo">HostelHunt</a>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#team">Team</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <div class="page-header">
-            <h1>🏠 List Your Room</h1>
-            <p>Share your space with fellow students and find the perfect roommate</p>
+<body class="min-h-screen bg-white">
+    <div class="container mx-auto px-4 py-8 max-w-2xl">
+        <!-- Back to Home Button -->
+        <div class="mb-6">
+            <a href="index.html" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Back to Home
+            </a>
         </div>
 
-        <form class="listing-form" id="listingForm">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-2">List Your Room</h1>
+            <p class="text-gray-600 text-lg">Find the perfect roommate for your hostel or flat</p>
+        </div>
 
-            <div class="form-section">
-                <h3>🏘️ Property Details</h3>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="bhk">BHK Type</label>
-                        <select id="bhk" name="bhk" required>
+        <!-- Success Message -->
+        <div id="successMessage" class="hidden mb-6">
+            <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg shadow-md success-message">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="font-medium">Room listed successfully!</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Container -->
+        <div class="bg-gray-50 rounded-2xl shadow-lg p-8">
+            <form id="roomForm" class="space-y-6">
+                <!-- Property Details Section -->
+                <div class="mb-8">
+                    <div class="flex items-center mb-4">
+                        <div class="w-1 h-6 bg-blue-500 rounded-full mr-3"></div>
+                        <h2 class="text-lg font-bold text-gray-900 flex items-center">
+                            🏠 Property Details
+                        </h2>
+                    </div>
+                    
+                    <!-- BHK -->
+                    <div class="mb-6">
+                        <label for="bhk" class="block text-sm font-semibold text-gray-900 mb-2">BHK Type</label>
+                        <select id="bhk" name="bhk" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-400 bg-white appearance-none cursor-pointer">
                             <option value="">Select BHK</option>
-                            <option value="1bhk">1 BHK</option>
-                            <option value="2bhk">2 BHK</option>
-                            <option value="3bhk">3 BHK</option>
-                            <option value="4bhk">4+ BHK</option>
-                            <option value="studio">Studio</option>
+                            <option value="1RK">1RK</option>
+                            <option value="1BHK">1BHK</option>
+                            <option value="2BHK">2BHK</option>
+                            <option value="3BHK">3BHK</option>
+                            <option value="4BHK">4BHK</option>
                         </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="roommates">Number of Roommates</label>
-                        <select id="roommates" name="roommates" required>
+                </div>
+
+                <!-- Number of Roommates -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div>
+                        <label for="roommates" class="block text-sm font-semibold text-gray-900 mb-2">Number of Roommates</label>
+                        <select id="roommates" name="roommates" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-400 bg-white appearance-none cursor-pointer">
                             <option value="">Select count</option>
-                            <option value="0">Just me (no roommates)</option>
-                            <option value="1">1 Roommate</option>
-                            <option value="2">2 Roommates</option>
-                            <option value="3">3 Roommates</option>
-                            <option value="4">4+ Roommates</option>
+                            <option value="0">0 (Solo)</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5+</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="building">Building Name</label>
-                        <input type="text" id="building" name="building" placeholder="e.g., Sunrise Apartments" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="locality">Locality/Area</label>
-                        <input type="text" id="locality" name="locality" placeholder="e.g., Koramangala, BTM Layout" required>
+
+                    <!-- Building Name -->
+                    <div>
+                        <label for="building" class="block text-sm font-semibold text-gray-900 mb-2">Building Name</label>
+                        <input type="text" id="building" name="building" placeholder="e.g., Sunrise Apartments" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-400 bg-white transform hover:scale-[1.01] focus:scale-[1.01]">
                     </div>
                 </div>
-            </div>
 
-            <div class="form-section">
-                <h3>💰 Pricing Details</h3>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="rent">Rent per Month (₹)</label>
-                        <input type="number" id="rent" name="rent" placeholder="15000" min="1000" required>
+                <!-- Locality Name -->
+                <div class="mb-8">
+                    <label for="locality" class="block text-sm font-semibold text-gray-900 mb-2">Locality/Area</label>
+                    <input type="text" id="locality" name="locality" placeholder="e.g., Koramangala, BTM Layout" required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-400 bg-white transform hover:scale-[1.01] focus:scale-[1.01]">
+                </div>
+
+                <!-- Pricing Details Section -->
+                <div class="mb-8">
+                    <div class="flex items-center mb-4">
+                        <div class="w-1 h-6 bg-amber-500 rounded-full mr-3"></div>
+                        <h2 class="text-lg font-bold text-gray-900 flex items-center">
+                            💰 Pricing Details
+                        </h2>
                     </div>
-                    <div class="form-group">
-                        <label for="deposit">Security Deposit (₹)</label>
-                        <input type="number" id="deposit" name="deposit" placeholder="30000" min="0" required>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Monthly Rent -->
+                        <div>
+                            <label for="rent" class="block text-sm font-semibold text-gray-900 mb-2">Rent per Month (₹)</label>
+                            <input type="text" id="rent" name="rent" placeholder="15000" required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-400 bg-white transform hover:scale-[1.01] focus:scale-[1.01]">
+                        </div>
+
+                        <!-- Deposit Amount -->
+                        <div>
+                            <label for="deposit" class="block text-sm font-semibold text-gray-900 mb-2">Security Deposit (₹)</label>
+                            <input type="text" id="deposit" name="deposit" placeholder="30000" required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-400 bg-white transform hover:scale-[1.01] focus:scale-[1.01]">
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="form-section">
-                <h3>🏠 Accommodation Type</h3>
-                <div class="radio-group">
-                    <label class="radio-option">
-                        <input type="radio" name="accommodation" value="private_room" required>
-                        <span>Private Room</span>
-                    </label>
-                    <label class="radio-option">
-                        <input type="radio" name="accommodation" value="shared_room" required>
-                        <span>Shared Room</span>
-                    </label>
-                    <label class="radio-option">
-                        <input type="radio" name="accommodation" value="entire_flat" required>
-                        <span>Entire Flat</span>
-                    </label>
-                </div>
-            </div>
+                <!-- Accommodation Type Section -->
+                <div class="mb-8">
+                    <div class="flex items-center mb-4">
+                        <div class="w-1 h-6 bg-emerald-500 rounded-full mr-3"></div>
+                        <h2 class="text-lg font-bold text-gray-900 flex items-center">
+                            🏡 Accommodation Details
+                        </h2>
+                    </div>
 
-            <div class="form-section">
-                <h3>🔧 Amenities</h3>
-                <div class="form-group full-width">
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
-                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
-                            <input type="checkbox" name="amenities" value="wifi" style="width: auto;">
-                            📶 Wi-Fi
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
-                            <input type="checkbox" name="amenities" value="ac" style="width: auto;">
-                            ❄️ AC
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
-                            <input type="checkbox" name="amenities" value="parking" style="width: auto;">
-                            🚗 Parking
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
-                            <input type="checkbox" name="amenities" value="laundry" style="width: auto;">
-                            👕 Washing Machine
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
-                            <input type="checkbox" name="amenities" value="gym" style="width: auto;">
-                            🏋️ Gym
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
-                            <input type="checkbox" name="amenities" value="security" style="width: auto;">
-                            🛡️ 24/7 Security
-                        </label>
+                    <!-- Lister Message -->
+                    <div class="mb-6">
+                        <label for="message" class="block text-sm font-semibold text-gray-900 mb-2">📝 Tell us about your space</label>
+                        <textarea id="message" name="message" rows="4" placeholder="Describe your room, amenities, preferences for roommates, nearby facilities..." required
+                                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-400 resize-vertical min-h-[100px] bg-white transform hover:scale-[1.01] focus:scale-[1.01]"></textarea>
+                    </div>
+
+                    <!-- Phone Number -->
+                    <div>
+                        <label for="phone" class="block text-sm font-semibold text-gray-900 mb-2">📞 Contact Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="Enter your mobile number" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-400 bg-white transform hover:scale-[1.01] focus:scale-[1.01]">
                     </div>
                 </div>
-            </div>
 
-            <div class="form-section">
-                <h3>📝 Additional Details</h3>
-                <div class="form-group full-width">
-                    <label for="description">Flat Details & Description</label>
-                    <textarea id="description" name="description" placeholder="Describe your flat, nearby amenities, transportation, and any specific requirements for roommates..." required></textarea>
+                <!-- Submit Button -->
+                <div class="pt-6">
+                    <button type="submit" 
+                            class="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 animate-pulse hover:animate-none">
+                        <span class="flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            🚀 Post My Room
+                        </span>
+                    </button>
                 </div>
-            </div>
+            </form>
+        </div>
 
-            <div class="form-section">
-                <h3>📞 Contact Information</h3>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="name">Your Name</label>
-                        <input type="text" id="name" name="name" placeholder="John Doe" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" name="phone" placeholder="+91 98765 43210" required>
-                    </div>
-                    <div class="form-group full-width">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" placeholder="john@example.com" required>
-                    </div>
-                </div>
-            </div>
-
-            <div class="submit-section">
-                <button type="submit" class="submit-btn">
-                    🚀 List My Room
-                </button>
-                <p style="margin-top: 1rem; color: #6B7280; font-size: 0.9rem;">
-                    By listing your room, you agree to our terms of service and privacy policy.
-                </p>
-            </div>
-        </form>
-    </main>
+        <!-- Footer -->
+        <div class="text-center mt-8">
+            <p class="text-gray-500 text-sm">© 2025 Hostel Hunt - Connecting Students with Perfect Rooms</p>
+        </div>
+    </div>
 
     <script>
-        // Progress tracking
-        const form = document.getElementById('listingForm');
-        const progressFill = document.getElementById('progressFill');
-        const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
-        
-        function updateProgress() {
-            let filledInputs = 0;
-            inputs.forEach(input => {
-                if (input.type === 'radio') {
-                    const radioGroup = form.querySelectorAll(`input[name="${input.name}"]`);
-                    const isChecked = Array.from(radioGroup).some(radio => radio.checked);
-                    if (isChecked && input.checked) filledInputs++;
-                } else if (input.value.trim() !== '') {
-                    filledInputs++;
-                }
-            });
-            
-            const progress = (filledInputs / inputs.length) * 100;
-            progressFill.style.width = progress + '%';
-        }
-
-        // Add event listeners to all form inputs
-        inputs.forEach(input => {
-            input.addEventListener('input', updateProgress);
-            input.addEventListener('change', updateProgress);
-        });
-
-        // Radio button styling
-        const radioOptions = document.querySelectorAll('.radio-option');
-        radioOptions.forEach(option => {
-            const radioInput = option.querySelector('input[type="radio"]');
-            radioInput.addEventListener('change', () => {
-                // Remove selected class from all options in the same group
-                const groupName = radioInput.name;
-                document.querySelectorAll(`input[name="${groupName}"]`).forEach(radio => {
-                    radio.closest('.radio-option').classList.remove('selected');
-                });
-                // Add selected class to current option
-                if (radioInput.checked) {
-                    option.classList.add('selected');
-                }
-                updateProgress();
-            });
-        });
-
-        // Form submission
-        form.addEventListener('submit', (e) => {
+        document.getElementById('roomForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
             // Get form data
-            const formData = new FormData(form);
-            const data = {};
+            const formData = {
+                id: Date.now(), // Simple ID generation
+                bhk: document.getElementById('bhk').value,
+                roommates: document.getElementById('roommates').value,
+                building: document.getElementById('building').value,
+                locality: document.getElementById('locality').value,
+                rent: document.getElementById('rent').value.replace(/,/g, ''), // Remove commas for storage
+                deposit: document.getElementById('deposit').value.replace(/,/g, ''), // Remove commas for storage
+                message: document.getElementById('message').value,
+                phone: document.getElementById('phone').value,
+                listedDate: new Date().toISOString()
+            };
+
+            // Get existing rooms from localStorage or create empty array
+            let existingRooms = JSON.parse(localStorage.getItem('hostelRooms') || '[]');
             
-            // Regular form fields
-            for (let [key, value] of formData.entries()) {
-                if (data[key]) {
-                    // Handle multiple values (like amenities checkboxes)
-                    if (Array.isArray(data[key])) {
-                        data[key].push(value);
-                    } else {
-                        data[key] = [data[key], value];
-                    }
-                } else {
-                    data[key] = value;
-                }
-            }
+            // Add new room data to the array
+            existingRooms.push(formData);
             
-            // Handle amenities checkboxes
-            const amenities = [];
-            document.querySelectorAll('input[name="amenities"]:checked').forEach(checkbox => {
-                amenities.push(checkbox.value);
-            });
-            data.amenities = amenities;
+            // Save updated array back to localStorage
+            localStorage.setItem('hostelRooms', JSON.stringify(existingRooms));
+
+            // Clear the form
+            document.getElementById('roomForm').reset();
             
-            console.log('Form Data:', data);
+            // Show success message
+            const successMessage = document.getElementById('successMessage');
+            successMessage.classList.remove('hidden');
             
-            // Simulate form submission
-            const submitBtn = form.querySelector('.submit-btn');
-            const originalText = submitBtn.textContent;
+            // Scroll to top to show the success message
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            submitBtn.textContent = '🔄 Submitting...';
-            submitBtn.disabled = true;
-            
+            // Hide success message after 4 seconds
             setTimeout(() => {
-                submitBtn.textContent = '✅ Room Listed Successfully!';
-                submitBtn.style.background = 'linear-gradient(45deg, #10B981, #059669)';
-                
-                // Show success message
-                const successDiv = document.createElement('div');
-                successDiv.className = 'success-feedback';
-                successDiv.textContent = '🎉 Your room has been listed successfully! You will receive inquiries via email and phone.';
-                form.appendChild(successDiv);
-                
-                // Reset form after delay
-                setTimeout(() => {
-                    form.reset();
-                    updateProgress();
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-                    submitBtn.style.background = 'linear-gradient(45deg, #F59E0B, #D97706)';
-                    successDiv.remove();
-                    radioOptions.forEach(option => option.classList.remove('selected'));
-                }, 3000);
-            }, 2000);
+                successMessage.classList.add('hidden');
+            }, 4000);
+
+            // Log the stored data for demo purposes
+            console.log('Room listed successfully:', formData);
+            console.log('Total rooms in storage:', existingRooms.length);
         });
 
-        // Header scroll effect
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('header');
-            if (window.scrollY > 50) {
-                header.style.background = 'rgba(255, 255, 255, 0.98)';
-                header.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
-            } else {
-                header.style.background = 'rgba(255, 255, 255, 0.95)';
-                header.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
-            }
-        });
-
-        // Input focus animations
-        document.querySelectorAll('input, select, textarea').forEach(input => {
-            input.addEventListener('focus', () => {
-                input.parentElement.style.transform = 'translateY(-2px)';
+        // Add some interactivity to form fields
+        const inputs = document.querySelectorAll('input, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.classList.add('ring-2', 'ring-blue-500', 'border-transparent');
             });
             
-            input.addEventListener('blur', () => {
-                input.parentElement.style.transform = 'translateY(0)';
+            input.addEventListener('blur', function() {
+                this.classList.remove('ring-2', 'ring-blue-500', 'border-transparent');
             });
         });
 
-        // Initialize progress on page load
-        updateProgress();
+        // Format phone number as user types
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 10) {
+                value = value.slice(0, 10);
+            }
+            e.target.value = value;
+        });
+
+        // Format rent and deposit with thousand separators (allow up to 10 digits)
+        ['rent', 'deposit'].forEach(id => {
+            document.getElementById(id).addEventListener('input', function(e) {
+                let value = e.target.value.replace(/,/g, '').replace(/\D/g, '');
+                if (value.length > 10) {
+                    value = value.slice(0, 10);
+                }
+                if (value && !isNaN(value)) {
+                    e.target.value = parseInt(value).toLocaleString('en-IN');
+                }
+            });
+        });
     </script>
 </body>
 </html>
