@@ -400,9 +400,8 @@
                 console.log('LocalStorage not available, using default rooms');
             }
 
-            if (rooms.length === 0) {
-                rooms = defaultRooms;
-            }
+            rooms = defaultRooms.concat(rooms);
+
 
             allRooms = rooms;
             applyFilters();
