@@ -257,9 +257,8 @@
             }
 
             // If no rooms in localStorage, use default rooms
-            if (rooms.length === 0) {
-                rooms = defaultRooms;
-            }
+            rooms = defaultRooms.concat(rooms);
+
 
             const roomsGrid = document.getElementById('roomsGrid');
             const noRoomsMessage = document.getElementById('noRoomsMessage');
